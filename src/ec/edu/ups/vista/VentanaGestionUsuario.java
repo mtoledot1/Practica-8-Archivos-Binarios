@@ -52,6 +52,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
         setClosable(true);
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameClosed(evt);
@@ -69,6 +70,11 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
         });
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnActualizarMouseClicked(evt);
+            }
+        });
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
@@ -194,14 +200,15 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        ddesActivar();
         String cedula = txtCedula.getText();
 	Usuario usuario = controladorUsuario.buscar(cedula);
 	if(usuario != null){
 	    txtNombre.setText(usuario.getNombre());
 	    txtApellido.setText(usuario.getApellido());
 	    txtCorreo.setText(usuario.getCorreo());
-	    int index = controladorUsuario.listarUsuarios().indexOf(usuario);
-	    tablaUsuarios.setRowSelectionInterval(index, index);
+//	    int index = controladorUsuario.listarUsuarios().indexOf(usuario);
+//	    tablaUsuarios.setRowSelectionInterval(index, index);
 	}else{
 	    JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
 	}
@@ -221,6 +228,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
+        ddesActivar();
         int fila = tablaUsuarios.getSelectedRow();
 	txtCedula.setText(tablaUsuarios.getValueAt(fila, 0)+"");
 	txtNombre.setText(tablaUsuarios.getValueAt(fila, 1)+"");
@@ -228,11 +236,33 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 	txtCorreo.setText(tablaUsuarios.getValueAt(fila, 3)+"");
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        // TODO add your handling code here:
+        activar();
+    }//GEN-LAST:event_formInternalFrameActivated
+
+    private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
+        // TODO add your handling code here:
+        ddesActivar();
+    }//GEN-LAST:event_btnActualizarMouseClicked
+
     public void limpiar(){
 	txtCedula.setText("");
 	txtNombre.setText("");
 	txtApellido.setText("");
 	txtCorreo.setText("");
+    }
+    
+    public void activar(){
+        txtNombre.enable(false);
+        txtApellido.enable(false);
+        txtCorreo.enable(false);
+    }
+    
+    public void ddesActivar(){
+        txtNombre.enable(true);
+        txtApellido.enable(true);
+        txtCorreo.enable(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

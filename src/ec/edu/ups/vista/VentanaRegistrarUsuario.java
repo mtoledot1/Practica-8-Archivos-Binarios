@@ -188,6 +188,7 @@ public class VentanaRegistrarUsuario extends javax.swing.JInternalFrame {
 	if(controladorUsuario.registrar(cedula, nombre, apellido, correo, pass)){
 	    JOptionPane.showMessageDialog(this, "Usuario Registrado", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 	    limpiar();
+            this.dispose();
 	}else
 	    JOptionPane.showMessageDialog(this, "Error en los datos del usuario", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnRegistrarActionPerformed

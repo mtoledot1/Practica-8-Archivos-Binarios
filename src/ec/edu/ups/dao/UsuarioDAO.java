@@ -26,6 +26,7 @@ public class UsuarioDAO implements IUsuarioDAO{
     
     private RandomAccessFile file;
     List<Usuario> lista;
+    private int tamaño;
     /*
     private String cedula, 10 caracteres (validar cédula)
     private String nombre, 25 caracteres (llenar con espacios o cortar)
@@ -37,6 +38,7 @@ public class UsuarioDAO implements IUsuarioDAO{
     public UsuarioDAO() {
         try {
 	    file = new RandomAccessFile("datos/usuario.dat", "rw");
+            int tamaño = 128;
 	} catch (FileNotFoundException ex) {
 	    System.out.println("Error de lectura y escritura: ");
 	    ex.printStackTrace();
@@ -59,7 +61,7 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     @Override
     public Usuario read(String cedula) {
-         try {
+        try {
             int pos = 0;
             while (pos < file.length()) {                
                 file.seek(pos);
@@ -75,6 +77,10 @@ public class UsuarioDAO implements IUsuarioDAO{
             System.out.println("Error de escritura y lectura");
             ex.printStackTrace();
         }
+//        Usuario usuario = new Usuario(cedula, null, null, null, null);
+//        if(usuarios.containsKey(usuario.hashCode())){
+//            return usuarios.get(usuario.hashCode());
+//        }
         return null;
     }
 
