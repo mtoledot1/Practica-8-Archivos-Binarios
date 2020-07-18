@@ -27,6 +27,7 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     private Map<Integer,Usuario> usuarios;
     private RandomAccessFile file;
+    private int tamaño;
     /*
     private String cedula, 10 caracteres (validar cédula)
     private String nombre, 25 caracteres (llenar con espacios o cortar)
@@ -39,6 +40,7 @@ public class UsuarioDAO implements IUsuarioDAO{
 	usuarios = new TreeMap<>();
         try {
 	    file = new RandomAccessFile("datos/usuario.dat", "rw");
+            int tamaño = 128;
 	} catch (FileNotFoundException ex) {
 	    System.out.println("Error de lectura y escritura: ");
 	    ex.printStackTrace();
@@ -61,10 +63,26 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     @Override
     public Usuario read(String cedula) {
-        Usuario usuario = new Usuario(cedula, null, null, null, null);
-        if(usuarios.containsKey(usuario.hashCode())){
-            return usuarios.get(usuario.hashCode());
+        try {
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+                String cedulaUs = file.readUTF();
+                cedulaUs = cedulaUs.trim();
+                if(cedula.equals(cedulaUs)){
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                    return usuario;
+                }
+                pos += 128;
+            }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
         }
+//        Usuario usuario = new Usuario(cedula, null, null, null, null);
+//        if(usuarios.containsKey(usuario.hashCode())){
+//            return usuarios.get(usuario.hashCode());
+//        }
         return null;
     }
 
