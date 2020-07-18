@@ -6,7 +6,6 @@
 package ec.edu.ups.controlador;
 
 import java.util.List;
-import ec.edu.ups.vista.VistaTelefono;
 import ec.edu.ups.idao.ITelefonoDAO;
 import ec.edu.ups.modelo.Telefono;
 import ec.edu.ups.vista.VentanaGestionTelefono;
@@ -20,7 +19,6 @@ import javax.swing.table.TableModel;
  */
 public class ControladorTelefono {
     
-    private VistaTelefono vistaTelefono;
     private ITelefonoDAO telefonoDAO;
     private Telefono telefono;
     private ControladorUsuario controladorUsuario;
@@ -69,9 +67,7 @@ public class ControladorTelefono {
     }
     
     public void verTelefono(){
-        int codigo = vistaTelefono.buscarTelefono();
-	telefono = new Telefono(codigo, "", "", "");
-        vistaTelefono.verTelefono(telefono);
+        
     }
     
     public void verTelefonos(DefaultTableModel tabla){

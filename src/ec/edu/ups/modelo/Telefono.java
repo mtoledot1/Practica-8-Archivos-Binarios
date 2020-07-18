@@ -41,6 +41,7 @@ public class Telefono implements Comparable<Telefono>{
      * @param numero the numero to set
      */
     public void setNumero(String numero) {
+	numero = validarString(numero, 25);
         this.numero = numero;
     }
 
@@ -55,6 +56,7 @@ public class Telefono implements Comparable<Telefono>{
      * @param tipo the tipo to set
      */
     public void setTipo(String tipo) {
+	tipo = validarString(tipo, 25);
         this.tipo = tipo;
     }
 
@@ -69,6 +71,7 @@ public class Telefono implements Comparable<Telefono>{
      * @param operadora the operadora to set
      */
     public void setOperadora(String operadora) {
+	operadora = validarString(operadora, 25);
         this.operadora = operadora;
     }
 
@@ -130,5 +133,14 @@ public class Telefono implements Comparable<Telefono>{
             return 0;
         }
 	return 1;
+    }
+    
+    public String validarString(String str, int longitud){
+	if(str.length() > longitud)
+	    str = str.substring(0, longitud);
+	else if(str.length() < longitud)
+	    while(str.length() < longitud)
+		str += " ";
+	return str;
     }
 }

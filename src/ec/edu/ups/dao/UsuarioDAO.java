@@ -24,9 +24,8 @@ import java.util.logging.Logger;
  */
 public class UsuarioDAO implements IUsuarioDAO{
     
-
-    private Map<Integer,Usuario> usuarios;
     private RandomAccessFile file;
+    List<Usuario> lista;
     /*
     private String cedula, 10 caracteres (validar cédula)
     private String nombre, 25 caracteres (llenar con espacios o cortar)
@@ -36,7 +35,6 @@ public class UsuarioDAO implements IUsuarioDAO{
     */
 
     public UsuarioDAO() {
-	usuarios = new TreeMap<>();
         try {
 	    file = new RandomAccessFile("datos/usuario.dat", "rw");
 	} catch (FileNotFoundException ex) {
@@ -61,31 +59,77 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     @Override
     public Usuario read(String cedula) {
-        Usuario usuario = new Usuario(cedula, null, null, null, null);
-        if(usuarios.containsKey(usuario.hashCode())){
-            return usuarios.get(usuario.hashCode());
+         try {
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+                String cedulaUs = file.readUTF();
+                cedulaUs = cedulaUs.trim();
+                if(cedula.equals(cedulaUs)){
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                    return usuario;
+                }
+                pos += 128;
+            }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
         }
         return null;
     }
 
     @Override
     public void update(Usuario usuario) {
-        if(usuarios.containsKey(usuario.hashCode())){
-	    usuario.setTelefonos(usuarios.get(usuario.hashCode()).getTelefonos());
-            usuarios.replace(usuario.hashCode(), usuario);
+	String cedula = usuario.getCedula();
+        lista = new ArrayList<>();
+	try {
+            int pos = 0;
+	    boolean cent = false;
+            while (pos < file.length()) {                
+		file.seek(pos);
+                String cedulaUs = file.readUTF();
+                cedulaUs = cedulaUs.trim();
+                if(cedula.equals(cedulaUs)){
+		    cent = true;
+		}
+		Usuario usr = new Usuario(cedulaUs, 
+			file.readUTF().trim(), 
+			file.readUTF().trim(), 
+			file.readUTF().trim(), 
+			file.readUTF().trim());
+		lista.add(usr);
+                pos += 128;
+            }
+	    if(cent){
+		
+	    }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Usuario usuario) {
-        if(usuarios.containsKey(usuario.hashCode())){
-            usuarios.remove(usuario.hashCode());
-        }
+    public void delete(String cedula) {
+        
     }
 
     @Override
     public List<Usuario> findAll() {
-        return new ArrayList(usuarios.values());
+	lista = new ArrayList<>();
+	try {
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+		Usuario usuario = new Usuario(file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+		lista.add(usuario);
+                pos += 128;
+            }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
+        return new ArrayList(lista);
     }
 
     @Override

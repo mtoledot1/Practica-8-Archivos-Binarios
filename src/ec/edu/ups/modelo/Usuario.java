@@ -8,19 +8,16 @@ public class Usuario {
     private String apellido;
     private String correo;
     private String contrasenia;
-    private List<Telefono> telefonos;
 
     public Usuario(String cedula, String nombre, String apellido, String correo, String contrasenia) {
-        telefonos = new ArrayList<>();
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
+	setCedula(cedula);
+	setNombre(nombre);
+	setApellido(apellido);
+	setCorreo(correo);
+	setContrasenia(contrasenia);
     }
 
     public Usuario() {
-        telefonos = new ArrayList<>();
     }
     
     /**
@@ -34,6 +31,7 @@ public class Usuario {
      * @param cedula the cedula to set
      */
     public void setCedula(String cedula) {
+	cedula = validarString(cedula, 10);
         this.cedula = cedula;
     }
 
@@ -48,6 +46,7 @@ public class Usuario {
      * @param nombre the nombre to set
      */
     public void setNombre(String nombre) {
+	nombre = validarString(nombre, 25);
         this.nombre = nombre;
     }
 
@@ -62,6 +61,7 @@ public class Usuario {
      * @param apellido the apellido to set
      */
     public void setApellido(String apellido) {
+	apellido = validarString(apellido, 25);
         this.apellido = apellido;
     }
 
@@ -76,6 +76,7 @@ public class Usuario {
      * @param correo the correo to set
      */
     public void setCorreo(String correo) {
+	correo = validarString(correo, 50);
         this.correo = correo;
     }
 
@@ -90,33 +91,8 @@ public class Usuario {
      * @param contrasenia the contrasenia to set
      */
     public void setContrasenia(String contrasenia) {
+	contrasenia = validarString(contrasenia, 8);
         this.contrasenia = contrasenia;
-    }
-
-    /**
-     * @return the telefonos
-     */
-    public List<Telefono> getTelefonos() {
-        return telefonos;
-    }
-    
-    public void setTelefonos(List<Telefono> telefonos){
-	this.telefonos = telefonos;
-    }
-    
-    public void agregarTelefono(Telefono telefono){
-        telefonos.add(telefono);
-    }
-    
-    public void actualizarTelefono(Telefono telefono){
-        if(telefonos.contains(telefono)){
-            telefonos.set(telefonos.indexOf(telefono), telefono);
-        }
-    }
-    
-    public void eliminarTelefono(Telefono telefono){
-        if(telefonos.contains(telefono))
-            telefonos.remove(telefono);
     }
 
     @Override
@@ -152,5 +128,14 @@ public class Usuario {
                 "Apellido: " + getApellido() + "\n" +
                 "Correo: " + getCorreo() + "\n" + 
                 "Contraseña: " + getContrasenia() + "\n";
+    }
+    
+    public String validarString(String str, int longitud){
+	if(str.length() > longitud)
+	    str = str.substring(0, longitud);
+	else if(str.length() < longitud)
+	    while(str.length() < longitud)
+		str += " ";
+	return str;
     }
 }

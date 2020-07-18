@@ -11,7 +11,6 @@ import ec.edu.ups.controlador.*;
 import ec.edu.ups.dao.*;
 import ec.edu.ups.vista.*;
 import ec.edu.ups.idao.*;
-import ec.edu.ups.interfaz.InicioSesion;
 
 /**
  *

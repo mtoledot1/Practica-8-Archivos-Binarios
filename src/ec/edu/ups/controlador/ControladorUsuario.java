@@ -15,8 +15,6 @@ import javax.swing.table.DefaultTableModel;
  * @author tano
  */
 public class ControladorUsuario {
-    private VistaUsuario vistaUsuario;
-    private VistaTelefono vistaTelefono;
     private IUsuarioDAO usuarioDAO;
     private Usuario usuario;
     private Usuario sesion;
@@ -28,55 +26,15 @@ public class ControladorUsuario {
     }
     
     public boolean registrar(String cedula, String nombre, String apellido, String correo, String pass){
-	usuario = new Usuario();
-	
-	cedula = validarString(cedula, 10);
-	usuario.setCedula(cedula);
-	
-	nombre = validarString(nombre, 25);
-	usuario.setNombre(nombre);
-	
-	apellido = validarString(apellido, 25);
-	usuario.setApellido(apellido);
-	
-	correo = validarString(correo, 50);
-	usuario.setCorreo(correo);
-	
-	/*if(pass.length() != 8)
-	    return false;*/
-	pass = validarString(pass, 8);
-	usuario.setContrasenia(pass);
-	
+	usuario = new Usuario(cedula, nombre, apellido, correo, correo);
         usuarioDAO.create(usuario);
 	return true;
     }
     
-    public void actualizar(){
-        usuario = vistaUsuario.actualizarUsuario();
-        usuarioDAO.update(usuario);
-        vistaUsuario.verUsuario(usuario);
-    }
     
     public void actualizar(String cedula, String nombre, String apellido, String correo, String pass){
 	usuario = new Usuario(cedula, nombre, apellido, correo, pass);
         usuarioDAO.update(usuario);
-    }
-    
-    public void eliminar(){
-        usuario = vistaUsuario.eliminarUsuario();
-        usuarioDAO.delete(usuario);
-    }
-    
-    public void verUsuario(){
-        String cedula = vistaUsuario.buscarUsuario();
-        usuario = usuarioDAO.read(cedula);
-        vistaUsuario.verUsuario(usuario);
-    }
-    
-    public void verUsuarios(){
-        List<Usuario> usuarios;
-        usuarios = usuarioDAO.findAll();
-        vistaUsuario.verUsuarios(usuarios);
     }
     
     public void verUsuarios(DefaultTableModel tabla){
@@ -110,33 +68,20 @@ public class ControladorUsuario {
         sesion = null;
     }
     
-    public void telefonosPorCedula(){
-        String cedula = vistaUsuario.buscarUsuario();
-        usuario = usuarioDAO.read(cedula);
-        System.out.println(usuario.toString());
-        List<Telefono> telefonos = usuario.getTelefonos();
-        vistaTelefono.verTelefonos(telefonos);
-    }
-    
-    public void telefonosSesion(){
-        List<Telefono> telefonos = sesion.getTelefonos();
-        vistaTelefono.verTelefonos(telefonos);
-    }
-    
-    public List<Telefono> telefonosSesionVentana(){
-        return sesion.getTelefonos();
-    }
+    /*public List<Telefono> telefonosSesionVentana(){
+        
+    }*/
     
     public Usuario buscar(String cedula){
         usuario = usuarioDAO.read(cedula);
         return usuario;
     }
     
-    public List<Telefono> telefonosPorCedula(String cedula){
+    /*public List<Telefono> telefonosPorCedula(String cedula){
         usuario = usuarioDAO.read(cedula);
-        List<Telefono> telefonos = usuario.getTelefonos();
+        
         return telefonos;
-    }
+    }*/
     
     public boolean sesionIniciada(){
         if(sesion == null)
@@ -170,15 +115,6 @@ public class ControladorUsuario {
 	    return true;
 	else
 	    return false;
-    }
-    
-    public String validarString(String str, int longitud){
-	if(str.length() > longitud)
-	    str = str.substring(0, longitud);
-	else if(str.length() < longitud)
-	    while(str.length() < longitud)
-		str += " ";
-	return str;
     }
 
     public Usuario getSesion() {
