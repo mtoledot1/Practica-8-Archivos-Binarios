@@ -38,7 +38,7 @@ public class ControladorTelefono {
     */
     public void registrar(int codigo, String numero, String tipo, String operadora, String cedula){
 	telefono = new Telefono(codigo, numero, tipo, operadora);
-	Usuario usuario = controladorUsuario.buscar(cedula);
+	Usuario usuario = controladorUsuario.buscar(controladorUsuario.getSesion().getCedula());
 	telefono.setUsuario(usuario);
 	telefonoDAO.create(telefono);
     }
@@ -76,6 +76,7 @@ public class ControladorTelefono {
     }
     
     public int ultimoCodigo(){
+
 	return telefonoDAO.obtenerUltimoCodigo();
     }
 }

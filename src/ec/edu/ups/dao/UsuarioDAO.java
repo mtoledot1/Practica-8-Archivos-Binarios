@@ -25,8 +25,8 @@ public class UsuarioDAO implements IUsuarioDAO{
     private List<Usuario> usuarios;
     private RandomAccessFile file;
     /*
-    private String cedula, 10 caracteres (validar cédula)
-    private String nombre, 25 caracteres (llenar con espacios o cortar)
+    private String cedula, 10+2=12 caracteres (validar cédula)
+    private String nombre, 25+2 caracteres (llenar con espacios o cortar)
     private String apellido, 25 caracteres (llenar con espacios o cortar)
     private String correo, 50 caracteres (llenar con espacios o cortar)
     private String contraseña; 8 caracteres (llenar con espacios o cortar)
@@ -61,12 +61,11 @@ public class UsuarioDAO implements IUsuarioDAO{
     public Usuario read(String cedula) {
         try {
             int pos = 0;
-	    file.seek(pos);
-            while (pos < file.length()) {                
+            while (pos < file.length()) {
+		file.seek(pos);
                 String cedulaUs = file.readUTF();
-                cedulaUs = cedulaUs.trim();
                 if(cedula.equals(cedulaUs)){
-                    Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                     return usuario;
                 }
                 pos += 128;
@@ -86,8 +85,8 @@ public class UsuarioDAO implements IUsuarioDAO{
             int pos = 0;
 	    file.seek(pos);
             while (pos < file.length()) {                
-                String cedulaUs = file.readUTF().trim();
-		Usuario usr = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                String cedulaUs = file.readUTF();
+		Usuario usr = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                 if(cedula.equals(cedulaUs)){
                     usr = usuario;
                 }
@@ -107,9 +106,9 @@ public class UsuarioDAO implements IUsuarioDAO{
             int pos = 0;
 	    file.seek(pos);
             while (pos < file.length()) {                
-                String cedulaUs = file.readUTF().trim();
+                String cedulaUs = file.readUTF();
                 if(!cedula.equals(cedulaUs)){
-                    Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                     usuarios.add(usuario);
                 }
                 pos += 128;
@@ -135,7 +134,7 @@ public class UsuarioDAO implements IUsuarioDAO{
             int pos = 0;
 	    file.seek(pos);
             while (pos < file.length()) {
-		Usuario usuario = new Usuario(file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+		Usuario usuario = new Usuario(file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                 pos += 128;
 		usuarios.add(usuario);
             }
@@ -150,18 +149,15 @@ public class UsuarioDAO implements IUsuarioDAO{
     public Usuario login(String correo, String pass) {
 	try {
 	    int salto = 66;
-	    file.seek(salto);
 	    while(salto < file.length()){
+		file.seek(salto);
 		String correoArchivo = file.readUTF();
 		correoArchivo = correoArchivo.trim();
 		String passArchivo = file.readUTF();
 		passArchivo = passArchivo.trim();
 		if(correo.equals(correoArchivo) && pass.equals(passArchivo)){
 		    file.seek(salto - 66);
-		    String cedula = file.readUTF();
-		    String nombre = file.readUTF();
-		    String apellido = file.readUTF();
-		    return new Usuario(cedula, nombre, apellido, correo, pass);
+		    return new Usuario(file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
 		}
 		salto += 128;
 	    }

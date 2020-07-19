@@ -31,7 +31,8 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	initComponents();
 	this.controladorUsuario = controladorUsuario;
 	this.controladorTelefono = controladorTelefono;
-	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
+	int codigo = (controladorTelefono.ultimoCodigo()+1);
+	txtCodigo.setText(codigo + "");
 	cbxTipo.addItem("Casa");
 	cbxTipo.addItem("Trabajo");
 	cbxTipo.addItem("Móvil");
