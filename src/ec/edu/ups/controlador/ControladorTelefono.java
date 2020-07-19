@@ -6,13 +6,11 @@
 package ec.edu.ups.controlador;
 
 import java.util.List;
-import ec.edu.ups.vista.VistaTelefono;
 import ec.edu.ups.idao.ITelefonoDAO;
 import ec.edu.ups.modelo.Telefono;
+import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.vista.VentanaGestionTelefono;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -20,7 +18,6 @@ import javax.swing.table.TableModel;
  */
 public class ControladorTelefono {
     
-    private VistaTelefono vistaTelefono;
     private ITelefonoDAO telefonoDAO;
     private Telefono telefono;
     private ControladorUsuario controladorUsuario;
@@ -40,20 +37,9 @@ public class ControladorTelefono {
     private String cedula; 10 bytes + 2 extras
     */
     public void registrar(int codigo, String numero, String tipo, String operadora, String cedula){
-	telefono.setCodigo(codigo);
-	
-	numero = validarString(numero, 25);
-	telefono.setNumero(numero);
-	
-	tipo = validarString(tipo, 25);
-	telefono.setTipo(tipo);
-	
-	operadora = validarString(operadora, 25);
-	telefono.setOperadora(operadora);
-	
-	cedula = validarString(cedula, 10);
-	telefono.setUsuario(controladorUsuario.buscar(cedula));
-	
+	telefono = new Telefono(codigo, numero, tipo, operadora);
+	Usuario usuario = controladorUsuario.buscar(cedula);
+	telefono.setUsuario(usuario);
 	telefonoDAO.create(telefono);
     }
     
@@ -68,12 +54,6 @@ public class ControladorTelefono {
         telefonoDAO.delete(telefono);
     }
     
-    public void verTelefono(){
-        int codigo = vistaTelefono.buscarTelefono();
-	telefono = new Telefono(codigo, "", "", "");
-        vistaTelefono.verTelefono(telefono);
-    }
-    
     public void verTelefonos(DefaultTableModel tabla){
         List<Telefono> telefonos;
         telefonos = telefonoDAO.findAll();
@@ -83,7 +63,8 @@ public class ControladorTelefono {
 		telefonos.get(i).getCodigo(),
 		telefonos.get(i).getTipo(),
 		telefonos.get(i).getNumero(),
-		telefonos.get(i).getOperadora()
+		telefonos.get(i).getOperadora(),
+		telefonos.get(i).getUsuario().getCedula()
 	    });
 	}
     }
@@ -94,13 +75,7 @@ public class ControladorTelefono {
 	return telefonos.size();
     }
     
-    public String validarString(String str, int longitud){
-	if(str.length() > longitud)
-	    str = str.substring(0, longitud);
-	else if(str.length() < longitud)
-	    while(str.length() < longitud)
-		str += " ";
-	return str;
+    public int ultimoCodigo(){
+	return telefonoDAO.obtenerUltimoCodigo();
     }
-    
 }

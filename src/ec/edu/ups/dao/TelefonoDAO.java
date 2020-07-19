@@ -30,16 +30,14 @@ public class TelefonoDAO implements ITelefonoDAO{
     private String operadora; 25 bytes + 2 extras
     private String cedula; 10 bytes + 2 extras
     */
-    private TreeSet<Telefono> telefonos;
     private RandomAccessFile file;
     private int tamanioRegistro;
     private ControladorUsuario controladorUsuario;
 
     public TelefonoDAO(ControladorUsuario controladorUsuario) {
-	telefonos = new TreeSet<>();
 	this.controladorUsuario = controladorUsuario;
 	try {
-	    tamanioRegistro = 97;
+	    tamanioRegistro = 98;
 	    file = new RandomAccessFile("datos/telefono.dat", "rw");
 	} catch (FileNotFoundException ex) {
 	    System.out.println("Error de lectura y escritura: ");
@@ -94,13 +92,32 @@ public class TelefonoDAO implements ITelefonoDAO{
 
     @Override
     public List<Telefono> findAll() {
-        return new ArrayList<Telefono>(telefonos);
+        try {
+            List<Telefono> telefono = new ArrayList<>();
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+		int codigo = file.readInt();
+                Telefono telf = new Telefono(codigo, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+		String cedula = file.readUTF().trim();
+		telf.setUsuario(controladorUsuario.buscar(cedula));
+                telefono.add(telf);
+                pos += tamanioRegistro;
+            }
+            return telefono;
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
+        return null;
     }
     
     public int obtenerUltimoCodigo(){
 	try{
 	    if(file.length() > tamanioRegistro)
 		file.seek(file.length() - tamanioRegistro);
+	    else
+		return 0;
 	    int codigo = file.readInt();
 	    return codigo;
 	}catch (IOException ex){

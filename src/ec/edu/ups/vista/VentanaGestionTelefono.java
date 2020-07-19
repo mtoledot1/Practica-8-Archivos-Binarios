@@ -31,7 +31,7 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	initComponents();
 	this.controladorUsuario = controladorUsuario;
 	this.controladorTelefono = controladorTelefono;
-	//txtCodigo.setText(this.controladorTelefono.cantidadTelefonos() + "");
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
 	cbxTipo.addItem("Casa");
 	cbxTipo.addItem("Trabajo");
 	cbxTipo.addItem("Móvil");
@@ -287,13 +287,13 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbxTipoActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        int codigo = this.controladorTelefono.cantidadTelefonos();
+        int codigo = controladorTelefono.ultimoCodigo()+1;
 	String numero = fTxtNumero.getText();
 	String tipo = (String)cbxTipo.getSelectedItem();
 	String operadora = (String)cbxOperadora.getSelectedItem();
 	String cedula = controladorUsuario.getSesion().getCedula();
 	controladorTelefono.registrar(codigo, numero, tipo, operadora, cedula);
-	txtCodigo.setText(this.controladorTelefono.cantidadTelefonos() + "");
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
 	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
 	limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -347,7 +347,7 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiar();
-	txtCodigo.setText(this.controladorTelefono.cantidadTelefonos()+"");
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
 	btnActualizar.setEnabled(false);
 	btnBorrar.setEnabled(false);
 	btnCancelar.setEnabled(false);

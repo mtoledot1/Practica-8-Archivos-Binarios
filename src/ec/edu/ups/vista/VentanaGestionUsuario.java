@@ -200,7 +200,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        ddesActivar();
+        desactivar();
         String cedula = txtCedula.getText();
 	Usuario usuario = controladorUsuario.buscar(cedula);
 	if(usuario != null){
@@ -228,7 +228,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
-        ddesActivar();
+        desactivar();
         int fila = tablaUsuarios.getSelectedRow();
 	txtCedula.setText(tablaUsuarios.getValueAt(fila, 0)+"");
 	txtNombre.setText(tablaUsuarios.getValueAt(fila, 1)+"");
@@ -243,7 +243,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
         // TODO add your handling code here:
-        ddesActivar();
+        desactivar();
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     public void limpiar(){
@@ -254,15 +254,15 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
     }
     
     public void activar(){
-        txtNombre.enable(false);
-        txtApellido.enable(false);
-        txtCorreo.enable(false);
-    }
-    
-    public void ddesActivar(){
         txtNombre.enable(true);
         txtApellido.enable(true);
         txtCorreo.enable(true);
+    }
+    
+    public void desactivar(){
+        txtNombre.enable(false);
+        txtApellido.enable(false);
+        txtCorreo.enable(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

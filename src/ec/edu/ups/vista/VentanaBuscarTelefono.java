@@ -181,7 +181,7 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
 	    txtNombre.setText(usuario.getNombre());
 	    txtApellido.setText(usuario.getApellido());
 	    txtCorreo.setText(usuario.getCorreo());
-	    List<Telefono> telefonos = controladorUsuario.telefonosPorCedula(cedula);
+	    /*List<Telefono> telefonos = controladorUsuario.telefonosPorCedula(cedula);
 	    DefaultTableModel tabla = (DefaultTableModel) tablaTelefonos.getModel();
 	    tabla.setRowCount(0);
 	    for(int i = 0; i < telefonos.size(); i++){
@@ -191,7 +191,7 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
 		    telefonos.get(i).getNumero(),
 		    telefonos.get(i).getOperadora()
 		});
-	    }
+	    }*/
 	}else{
 	    JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
 	}

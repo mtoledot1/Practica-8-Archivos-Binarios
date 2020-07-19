@@ -11,10 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,9 +22,8 @@ import java.util.logging.Logger;
 public class UsuarioDAO implements IUsuarioDAO{
     
 
-    private Map<Integer,Usuario> usuarios;
+    private List<Usuario> usuarios;
     private RandomAccessFile file;
-    private int tamaño;
     /*
     private String cedula, 10 caracteres (validar cédula)
     private String nombre, 25 caracteres (llenar con espacios o cortar)
@@ -37,7 +33,6 @@ public class UsuarioDAO implements IUsuarioDAO{
     */
 
     public UsuarioDAO() {
-	usuarios = new TreeMap<>();
         try {
 	    file = new RandomAccessFile("datos/usuario.dat", "rw");
             int tamaño = 128;
@@ -79,31 +74,75 @@ public class UsuarioDAO implements IUsuarioDAO{
             System.out.println("Error de escritura y lectura");
             ex.printStackTrace();
         }
-//        Usuario usuario = new Usuario(cedula, null, null, null, null);
-//        if(usuarios.containsKey(usuario.hashCode())){
-//            return usuarios.get(usuario.hashCode());
-//        }
         return null;
     }
 
     @Override
     public void update(Usuario usuario) {
-        if(usuarios.containsKey(usuario.hashCode())){
-	    usuario.setTelefonos(usuarios.get(usuario.hashCode()).getTelefonos());
-            usuarios.replace(usuario.hashCode(), usuario);
+	usuarios = new ArrayList<>();
+	String cedula = usuario.getCedula();
+        try {
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+                String cedulaUs = file.readUTF().trim();
+		Usuario usr = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                if(cedula.equals(cedulaUs)){
+                    usr = usuario;
+                }
+		usuarios.add(usr);
+                pos += 128;
+            }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Usuario usuario) {
-        if(usuarios.containsKey(usuario.hashCode())){
-            usuarios.remove(usuario.hashCode());
+    public void delete(String cedula) {
+	usuarios = new ArrayList<>();
+        try {
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+                String cedulaUs = file.readUTF().trim();
+                if(!cedula.equals(cedulaUs)){
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                    usuarios.add(usuario);
+                }
+                pos += 128;
+            }
+	    file.seek(0);
+	    for(Usuario u : usuarios){
+		file.writeUTF(u.getCedula());
+		file.writeUTF(u.getNombre());
+		file.writeUTF(u.getApellido());
+		file.writeUTF(u.getCorreo());
+		file.writeUTF(u.getContrasenia());
+	    }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
         }
     }
 
     @Override
     public List<Usuario> findAll() {
-        return new ArrayList(usuarios.values());
+	usuarios = new ArrayList<>();
+        try {
+            int pos = 0;
+            while (pos < file.length()) {
+                file.seek(pos);
+		Usuario usuario = new Usuario(file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                pos += 128;
+		usuarios.add(usuario);
+            }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
+	return usuarios;
     }
 
     @Override
