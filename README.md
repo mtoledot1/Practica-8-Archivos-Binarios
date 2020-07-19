@@ -1,1 +1,1 @@
-# Practica-de-laboratorio-04-Agenda-Telefonica-Interfaz-grafica-
+# Práctica de laboratorio 08: Agenda Telefónica con MVC y DAO con Archivos Binarios”
