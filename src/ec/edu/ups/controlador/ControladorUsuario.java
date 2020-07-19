@@ -25,7 +25,7 @@ public class ControladorUsuario {
     public ControladorUsuario(IUsuarioDAO iUsuarioDAO) {
         //this.vistaUsuario = vistaUsuario;
         //this.vistaTelefono = vistaTelefono;
-        this.usuarioDAO = iUsuarioDAO;
+        this.usuarioDAO = iUsuarioDAO; 
     }
     
     public boolean registrar(String cedula, String nombre, String apellido, String correo, String pass){
