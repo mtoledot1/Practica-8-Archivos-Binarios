@@ -94,7 +94,7 @@ public class TelefonoDAO implements ITelefonoDAO{
         
     }
     
-    
+    //findAll
     @Override
     public List<Telefono> findAll() {
         try {
