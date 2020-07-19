@@ -40,7 +40,8 @@ public class ControladorTelefono {
     private String cedula; 10 bytes + 2 extras
     */
     public void registrar(int codigo ,String numero, String tipo, String operadora, String cedula){
-	telefono.setCodigo(codigo);
+	telefono.setCodigo(codigo); 
+        
 	
 	numero = validarString(numero, 25);
 	telefono.setNumero(numero);
