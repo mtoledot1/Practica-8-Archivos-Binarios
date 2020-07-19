@@ -13,4 +13,5 @@ public interface ITelefonoDAO {
     public void update(Telefono telefono);
     public void delete(Telefono telefono);   
     public List<Telefono> findAll();
+    
 }

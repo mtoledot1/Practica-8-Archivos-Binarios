@@ -288,6 +288,7 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         int codigo = this.controladorTelefono.cantidadTelefonos();
+        txtCodigo.setText(String.valueOf(codigo));
 	String numero = fTxtNumero.getText();
 	String tipo = (String)cbxTipo.getSelectedItem();
 	String operadora = (String)cbxOperadora.getSelectedItem();
@@ -339,6 +340,8 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameClosed
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        int codigo = controladorTelefono.cantidadTelefonos();
+        txtCodigo.setText(String.valueOf(codigo));
         btnActualizar.setEnabled(false);
 	btnBorrar.setEnabled(false);
 	btnCancelar.setEnabled(false);

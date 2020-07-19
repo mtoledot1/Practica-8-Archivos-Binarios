@@ -207,7 +207,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 	    txtNombre.setText(usuario.getNombre());
 	    txtApellido.setText(usuario.getApellido());
 	    txtCorreo.setText(usuario.getCorreo());
-//	    int index = controladorUsuario.listarUsuarios().indexOf(usuario);
+	    int index = controladorUsuario.listarUsuarios().indexOf(usuario);
 //	    tablaUsuarios.setRowSelectionInterval(index, index);
 	}else{
 	    JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);

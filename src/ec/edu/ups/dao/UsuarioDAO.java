@@ -69,9 +69,12 @@ public class UsuarioDAO implements IUsuarioDAO{
                 file.seek(pos);
                 String cedulaUs = file.readUTF();
                 cedulaUs = cedulaUs.trim();
+                
                 if(cedula.equals(cedulaUs)){
                     Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
                     return usuario;
+                }else{
+                    
                 }
                 pos += 128;
             }

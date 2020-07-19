@@ -8,6 +8,7 @@ package ec.edu.ups.controlador;
 import ec.edu.ups.idao.*;
 import ec.edu.ups.modelo.*;
 import ec.edu.ups.vista.*;
+import java.io.RandomAccessFile;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 /**

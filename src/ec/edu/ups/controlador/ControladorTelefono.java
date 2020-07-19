@@ -39,7 +39,7 @@ public class ControladorTelefono {
     private String operadora; 25 bytes + 2 extras
     private String cedula; 10 bytes + 2 extras
     */
-    public void registrar(int codigo, String numero, String tipo, String operadora, String cedula){
+    public void registrar(int codigo ,String numero, String tipo, String operadora, String cedula){
 	telefono.setCodigo(codigo);
 	
 	numero = validarString(numero, 25);
@@ -91,7 +91,8 @@ public class ControladorTelefono {
     public int cantidadTelefonos(){
 	List<Telefono> telefonos;
         telefonos = telefonoDAO.findAll();
-	return telefonos.size();
+	int tamaño = telefonos.size();
+        return tamaño;
     }
     
     public String validarString(String str, int longitud){

@@ -5,6 +5,7 @@
  */
 package ec.edu.ups.dao;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import ec.edu.ups.controlador.ControladorUsuario;
 import ec.edu.ups.modelo.Telefono;
 import ec.edu.ups.idao.ITelefonoDAO;
@@ -13,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 import javax.swing.text.html.HTML;
@@ -91,11 +93,27 @@ public class TelefonoDAO implements ITelefonoDAO{
     public void delete(Telefono telefono) {
         
     }
-
+    
+    
     @Override
     public List<Telefono> findAll() {
-        return new ArrayList<Telefono>(telefonos);
+        try {
+            List<Telefono> telefono = new ArrayList<>();
+            int pos = 0;
+            while (pos < file.length()) {                
+                file.seek(pos);
+                Telefono telf = new Telefono(file.readInt(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                telefono.add(telf);
+                pos += tamanioRegistro;
+            }
+            return telefono;
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
+        return null;
     }
+    
     
     public int obtenerUltimoCodigo(){
 	try{
