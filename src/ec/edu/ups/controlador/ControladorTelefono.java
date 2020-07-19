@@ -49,9 +49,7 @@ public class ControladorTelefono {
     }
     
     public void eliminar(int codigo){
-	telefono = new Telefono();
-	telefono.setCodigo(codigo);
-        telefonoDAO.delete(telefono);
+        telefonoDAO.delete(codigo);
     }
     
     public void verTelefonos(DefaultTableModel tabla){
@@ -61,10 +59,10 @@ public class ControladorTelefono {
 	for(int i = 0; i < telefonos.size(); i++){
 	    tabla.addRow(new Object[]{
 		telefonos.get(i).getCodigo(),
-		telefonos.get(i).getTipo(),
-		telefonos.get(i).getNumero(),
-		telefonos.get(i).getOperadora(),
-		telefonos.get(i).getUsuario().getCedula()
+		telefonos.get(i).getTipo().trim(),
+		telefonos.get(i).getNumero().trim(),
+		telefonos.get(i).getOperadora().trim(),
+		telefonos.get(i).getUsuario().getCedula().trim()
 	    });
 	}
     }
@@ -76,7 +74,6 @@ public class ControladorTelefono {
     }
     
     public int ultimoCodigo(){
-
 	return telefonoDAO.obtenerUltimoCodigo();
     }
 }

@@ -45,7 +45,10 @@ public class UsuarioDAO implements IUsuarioDAO{
     @Override
     public void create(Usuario usuario) {
 	try {
-	    file.seek(file.length());
+	    if(file.length() > 0)
+		file.seek(file.length());
+	    else
+		file.seek(0);
 	    file.writeUTF(usuario.getCedula());
 	    file.writeUTF(usuario.getNombre());
 	    file.writeUTF(usuario.getApellido());
@@ -63,7 +66,7 @@ public class UsuarioDAO implements IUsuarioDAO{
             int pos = 0;
             while (pos < file.length()) {
 		file.seek(pos);
-                String cedulaUs = file.readUTF();
+                String cedulaUs = file.readUTF().trim();
                 if(cedula.equals(cedulaUs)){
                     Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                     return usuario;
@@ -93,6 +96,10 @@ public class UsuarioDAO implements IUsuarioDAO{
 		usuarios.add(usr);
                 pos += 128;
             }
+	    file.setLength(0);
+	    for(Usuario u : usuarios){
+		create(u);
+	    }
         } catch (IOException ex) {
             System.out.println("Error de escritura y lectura");
             ex.printStackTrace();
@@ -104,8 +111,8 @@ public class UsuarioDAO implements IUsuarioDAO{
 	usuarios = new ArrayList<>();
         try {
             int pos = 0;
-	    file.seek(pos);
-            while (pos < file.length()) {                
+            while (pos < file.length()) {
+		file.seek(pos);
                 String cedulaUs = file.readUTF();
                 if(!cedula.equals(cedulaUs)){
                     Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
@@ -113,13 +120,9 @@ public class UsuarioDAO implements IUsuarioDAO{
                 }
                 pos += 128;
             }
-	    file.seek(0);
+	    file.setLength(0);
 	    for(Usuario u : usuarios){
-		file.writeUTF(u.getCedula());
-		file.writeUTF(u.getNombre());
-		file.writeUTF(u.getApellido());
-		file.writeUTF(u.getCorreo());
-		file.writeUTF(u.getContrasenia());
+		create(u);
 	    }
         } catch (IOException ex) {
             System.out.println("Error de escritura y lectura");

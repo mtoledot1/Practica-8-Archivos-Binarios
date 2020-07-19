@@ -39,10 +39,10 @@ public class ControladorUsuario {
         tabla.setRowCount(0);
 	for(int i = 0; i < usuarios.size(); i++){
 	    tabla.addRow(new Object[]{
-		usuarios.get(i).getCedula(),
-		usuarios.get(i).getNombre(),
-		usuarios.get(i).getApellido(),
-		usuarios.get(i).getCorreo()
+		usuarios.get(i).getCedula().trim(),
+		usuarios.get(i).getNombre().trim(),
+		usuarios.get(i).getApellido().trim(),
+		usuarios.get(i).getCorreo().trim()
 	    });
 	}
     }
@@ -64,20 +64,10 @@ public class ControladorUsuario {
         sesion = null;
     }
     
-    /*public List<Telefono> telefonosSesionVentana(){
-        
-    }*/
-    
     public Usuario buscar(String cedula){
         usuario = usuarioDAO.read(cedula);
         return usuario;
     }
-    
-    /*public List<Telefono> telefonosPorCedula(String cedula){
-        usuario = usuarioDAO.read(cedula);
-        
-        return telefonos;
-    }*/
     
     public boolean sesionIniciada(){
         if(sesion == null)

@@ -67,8 +67,6 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	cbxTipo.addItem(mensajes.getString("Tipo4"));
 	cbxTipo.addItem(mensajes.getString("Tipo5"));
 	cbxTipo.addItem(mensajes.getString("Tipo6"));
-	
-	
     }
 
     /**
