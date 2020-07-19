@@ -10,6 +10,7 @@ import ec.edu.ups.idao.ITelefonoDAO;
 import ec.edu.ups.modelo.Telefono;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.vista.VentanaGestionTelefono;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -52,9 +53,7 @@ public class ControladorTelefono {
         telefonoDAO.delete(codigo);
     }
     
-    public void verTelefonos(DefaultTableModel tabla){
-        List<Telefono> telefonos;
-        telefonos = telefonoDAO.findAll();
+    public void verTelefonos(DefaultTableModel tabla, List<Telefono> telefonos){
 	tabla.setNumRows(0);
 	for(int i = 0; i < telefonos.size(); i++){
 	    tabla.addRow(new Object[]{
@@ -67,13 +66,30 @@ public class ControladorTelefono {
 	}
     }
     
-    public int cantidadTelefonos(){
-	List<Telefono> telefonos;
-        telefonos = telefonoDAO.findAll();
-	return telefonos.size();
+    public List<Telefono> listarTelefonos(){
+	return telefonoDAO.findAll();
     }
     
     public int ultimoCodigo(){
 	return telefonoDAO.obtenerUltimoCodigo();
+    }
+    
+    public List<Telefono> telefonosPorCedula(String cedula){
+	cedula = cedula.trim();
+	List<Telefono> telefonos = new ArrayList<>();
+	for(Telefono t : telefonoDAO.findAll()){
+	    if(t.getUsuario().getCedula().trim().equals(cedula))
+		telefonos.add(t);
+	}
+	return telefonos;
+    }
+    
+    public List<Telefono> telefonosPorCorreo(String correo){
+	List<Telefono> telefonos = new ArrayList<>();
+	for(Telefono t : telefonoDAO.findAll()){
+	    if(t.getUsuario().getCorreo().trim().equals(correo))
+		telefonos.add(t);
+	}
+	return telefonos;
     }
 }

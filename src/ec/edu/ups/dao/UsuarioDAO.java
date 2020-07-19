@@ -62,6 +62,7 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     @Override
     public Usuario read(String cedula) {
+	cedula = cedula.trim();
         try {
             int pos = 0;
             while (pos < file.length()) {

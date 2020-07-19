@@ -65,7 +65,9 @@ public class TelefonoDAO implements ITelefonoDAO{
     public Telefono read(int codigo) {
 	try{
 	    int salto = 0;
-	    while(salto < file.length()){
+	    while(salto < file.length()-1){
+		System.out.println("Longitud archivo: " + file.length());
+		System.out.println("Posicion puntero: " + salto);
 		file.seek(salto);
 		int codigoArchivo = file.readInt();
 		if(codigo == codigoArchivo){
@@ -74,6 +76,7 @@ public class TelefonoDAO implements ITelefonoDAO{
 		    telefono.setUsuario(usuario);
 		    return telefono;
 		}
+		salto += tamanioRegistro;
 	    }
 	}catch (IOException ex){
 	    System.out.println("Error de lectura y escritura: ");
@@ -136,18 +139,19 @@ public class TelefonoDAO implements ITelefonoDAO{
             int pos = 0;
 	    file.seek(pos);
 	    System.out.println("Longitud archivo: "+file.length());
-            while (pos < file.length()-1) {
+            while (pos < file.length()) {
+		System.out.println(file.getFilePointer());
 		int codigo = file.readInt();
-		//System.out.println(file.getFilePointer());
+		System.out.println(file.getFilePointer());
 		String numero = file.readUTF();
-		//System.out.println(file.getFilePointer());
+		System.out.println(file.getFilePointer());
 		String tipo = file.readUTF();
-		//System.out.println(file.getFilePointer());
+		System.out.println(file.getFilePointer());
 		String operadora = file.readUTF();
-		//System.out.println(file.getFilePointer());
+		System.out.println(file.getFilePointer());
                 Telefono telf = new Telefono(codigo, numero, tipo, operadora);
 		String cedula = file.readUTF();
-		//System.out.println(file.getFilePointer());
+		System.out.println(file.getFilePointer());
 		telf.setUsuario(controladorUsuario.buscar(cedula));
                 telefonos.add(telf);
                 pos += tamanioRegistro;
@@ -162,6 +166,7 @@ public class TelefonoDAO implements ITelefonoDAO{
     
     public int obtenerUltimoCodigo(){
 	try{
+	    System.out.println(file.length());
 	    if(file.length() >= tamanioRegistro)
 		file.seek(file.length() - tamanioRegistro);
 	    else
