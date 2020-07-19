@@ -10,10 +10,10 @@ public class Telefono implements Comparable<Telefono>{
     }
 
     public Telefono(int codigo, String numero, String tipo, String operadora) {
-        this.codigo = codigo;
-        this.numero = numero;
-        this.tipo = tipo;
-        this.operadora = operadora;
+        setCodigo(codigo);
+	setNumero(numero);
+	setTipo(tipo);
+	setOperadora(operadora);
     }
 
     /**

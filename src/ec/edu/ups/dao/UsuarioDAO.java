@@ -11,10 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,12 +21,12 @@ import java.util.logging.Logger;
  */
 public class UsuarioDAO implements IUsuarioDAO{
     
+
+    private List<Usuario> usuarios;
     private RandomAccessFile file;
-    List<Usuario> lista;
-    private int tamaño;
     /*
-    private String cedula, 10 caracteres (validar cédula)
-    private String nombre, 25 caracteres (llenar con espacios o cortar)
+    private String cedula, 10+2=12 caracteres (validar cédula)
+    private String nombre, 25+2 caracteres (llenar con espacios o cortar)
     private String apellido, 25 caracteres (llenar con espacios o cortar)
     private String correo, 50 caracteres (llenar con espacios o cortar)
     private String contraseña; 8 caracteres (llenar con espacios o cortar)
@@ -48,6 +45,10 @@ public class UsuarioDAO implements IUsuarioDAO{
     @Override
     public void create(Usuario usuario) {
 	try {
+	    if(file.length() > 0)
+		file.seek(file.length());
+	    else
+		file.seek(0);
 	    file.writeUTF(usuario.getCedula());
 	    file.writeUTF(usuario.getNombre());
 	    file.writeUTF(usuario.getApellido());
@@ -61,14 +62,14 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     @Override
     public Usuario read(String cedula) {
+	cedula = cedula.trim();
         try {
             int pos = 0;
-            while (pos < file.length()) {                
-                file.seek(pos);
-                String cedulaUs = file.readUTF();
-                cedulaUs = cedulaUs.trim();
+            while (pos < file.length()) {
+		file.seek(pos);
+                String cedulaUs = file.readUTF().trim();
                 if(cedula.equals(cedulaUs)){
-                    Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                     return usuario;
                 }
                 pos += 128;
@@ -77,37 +78,28 @@ public class UsuarioDAO implements IUsuarioDAO{
             System.out.println("Error de escritura y lectura");
             ex.printStackTrace();
         }
-//        Usuario usuario = new Usuario(cedula, null, null, null, null);
-//        if(usuarios.containsKey(usuario.hashCode())){
-//            return usuarios.get(usuario.hashCode());
-//        }
         return null;
     }
 
     @Override
     public void update(Usuario usuario) {
+	usuarios = new ArrayList<>();
 	String cedula = usuario.getCedula();
-        lista = new ArrayList<>();
-	try {
+        try {
             int pos = 0;
-	    boolean cent = false;
+	    file.seek(pos);
             while (pos < file.length()) {                
-		file.seek(pos);
                 String cedulaUs = file.readUTF();
-                cedulaUs = cedulaUs.trim();
+		Usuario usr = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                 if(cedula.equals(cedulaUs)){
-		    cent = true;
-		}
-		Usuario usr = new Usuario(cedulaUs, 
-			file.readUTF().trim(), 
-			file.readUTF().trim(), 
-			file.readUTF().trim(), 
-			file.readUTF().trim());
-		lista.add(usr);
+                    usr = usuario;
+                }
+		usuarios.add(usr);
                 pos += 128;
             }
-	    if(cent){
-		
+	    file.setLength(0);
+	    for(Usuario u : usuarios){
+		create(u);
 	    }
         } catch (IOException ex) {
             System.out.println("Error de escritura y lectura");
@@ -117,25 +109,44 @@ public class UsuarioDAO implements IUsuarioDAO{
 
     @Override
     public void delete(String cedula) {
-        
+	usuarios = new ArrayList<>();
+        try {
+            int pos = 0;
+            while (pos < file.length()) {
+		file.seek(pos);
+                String cedulaUs = file.readUTF();
+                if(!cedula.equals(cedulaUs)){
+                    Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
+                    usuarios.add(usuario);
+                }
+                pos += 128;
+            }
+	    file.setLength(0);
+	    for(Usuario u : usuarios){
+		create(u);
+	    }
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public List<Usuario> findAll() {
-	lista = new ArrayList<>();
-	try {
+	usuarios = new ArrayList<>();
+        try {
             int pos = 0;
-            while (pos < file.length()) {                
-                file.seek(pos);
-		Usuario usuario = new Usuario(file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
-		lista.add(usuario);
+	    file.seek(pos);
+            while (pos < file.length()) {
+		Usuario usuario = new Usuario(file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                 pos += 128;
+		usuarios.add(usuario);
             }
         } catch (IOException ex) {
             System.out.println("Error de escritura y lectura");
             ex.printStackTrace();
         }
-        return new ArrayList(lista);
+	return usuarios;
     }
 
     @Override
@@ -150,10 +161,7 @@ public class UsuarioDAO implements IUsuarioDAO{
 		passArchivo = passArchivo.trim();
 		if(correo.equals(correoArchivo) && pass.equals(passArchivo)){
 		    file.seek(salto - 66);
-		    String cedula = file.readUTF();
-		    String nombre = file.readUTF();
-		    String apellido = file.readUTF();
-		    return new Usuario(cedula, nombre, apellido, correo, pass);
+		    return new Usuario(file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
 		}
 		salto += 128;
 	    }

@@ -44,11 +44,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 	telefonoDAO = new TelefonoDAO(controladorUsuario);
 	controladorTelefono = new ControladorTelefono(telefonoDAO, controladorUsuario);
 	
-	controladorUsuario.registrar("0104760517",
+	if(controladorUsuario.buscar("0104760517") == null){
+	    controladorUsuario.registrar("0104760517",
 				    "sebastian",
 				    "toledo",
-				    "mtoledot1",
+				    "tano",
 				    "12345678");
+	}
 	/*controladorUsuario.registrar("0105698123",
 				    "pepito",
 				    "perez",
@@ -69,7 +71,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 					"Móvil",
 					"Movistar");*/
 	
-	localizacion = new Locale("en","UK");
+	localizacion = new Locale("es","EC");
 	mensajes = ResourceBundle.getBundle("ec.edu.ups.idiomas.mensajes", localizacion);
 	
 	iniciarSesion = new VentanaIniciarSesion(controladorUsuario, this, localizacion, mensajes);

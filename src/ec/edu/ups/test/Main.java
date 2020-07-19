@@ -5,13 +5,6 @@
  */
 package ec.edu.ups.test;
 
-import java.util.Scanner;
-import ec.edu.ups.modelo.Usuario;
-import ec.edu.ups.controlador.*;
-import ec.edu.ups.dao.*;
-import ec.edu.ups.vista.*;
-import ec.edu.ups.idao.*;
-
 /**
  *
  * @author tano

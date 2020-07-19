@@ -7,11 +7,15 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.ControladorTelefono;
 import ec.edu.ups.controlador.ControladorUsuario;
+import ec.edu.ups.modelo.Telefono;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
@@ -31,7 +35,8 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	initComponents();
 	this.controladorUsuario = controladorUsuario;
 	this.controladorTelefono = controladorTelefono;
-	//txtCodigo.setText(this.controladorTelefono.cantidadTelefonos() + "");
+	int codigo = (controladorTelefono.ultimoCodigo()+1);
+	txtCodigo.setText(codigo + "");
 	cbxTipo.addItem("Casa");
 	cbxTipo.addItem("Trabajo");
 	cbxTipo.addItem("Móvil");
@@ -43,7 +48,6 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	cbxOperadora.addItem("Movistar");
 	cbxOperadora.addItem("Tuenti");
 	cbxOperadora.addItem("Etapa");
-	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
 	cambiarIdioma(localizacion, mensajes);
     }
     
@@ -66,8 +70,6 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	cbxTipo.addItem(mensajes.getString("Tipo4"));
 	cbxTipo.addItem(mensajes.getString("Tipo5"));
 	cbxTipo.addItem(mensajes.getString("Tipo6"));
-	
-	
     }
 
     /**
@@ -287,22 +289,24 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbxTipoActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        int codigo = this.controladorTelefono.cantidadTelefonos();
+        int codigo = Integer.parseInt(txtCodigo.getText());
 	String numero = fTxtNumero.getText();
 	String tipo = (String)cbxTipo.getSelectedItem();
 	String operadora = (String)cbxOperadora.getSelectedItem();
 	String cedula = controladorUsuario.getSesion().getCedula();
 	controladorTelefono.registrar(codigo, numero, tipo, operadora, cedula);
-	txtCodigo.setText(this.controladorTelefono.cantidadTelefonos() + "");
-	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
+	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(),
+		controladorTelefono.telefonosPorCedula(controladorUsuario.getSesion().getCedula()));
 	limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         int codigo = Integer.parseInt(txtCodigo.getText());
 	controladorTelefono.eliminar(codigo);
-	txtCodigo.setText(this.controladorTelefono.cantidadTelefonos() + "");
-	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
+	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(),
+		controladorTelefono.telefonosPorCedula(controladorUsuario.getSesion().getCedula()));
 	limpiar();
     }//GEN-LAST:event_btnBorrarActionPerformed
 
@@ -313,13 +317,36 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	String operadora = (String)cbxOperadora.getSelectedItem();
 	String cedula = controladorUsuario.getSesion().getCedula();
 	controladorTelefono.registrar(codigo, numero, tipo, operadora, cedula);
-	txtCodigo.setText(this.controladorTelefono.cantidadTelefonos() + "");
-	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
+	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(),
+		controladorTelefono.telefonosPorCedula(controladorUsuario.getSesion().getCedula()));
 	limpiar();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        String numero = fTxtNumero.getText();
+	if(!numero.isEmpty()){
+	    List<Telefono> telefonos = controladorTelefono.telefonosPorCedula(controladorUsuario.getSesion().getCedula());
+	    if(!telefonos.isEmpty())
+		for(Telefono t : telefonos){
+		    if(t.getNumero().trim().equals(numero)){
+			int index = telefonos.indexOf(t);
+			tablaTelefonos.setRowSelectionInterval(index, index);
+			txtCodigo.setText(tablaTelefonos.getValueAt(index, 0)+"");
+			cbxTipo.setSelectedItem(tablaTelefonos.getValueAt(index, 1));
+			fTxtNumero.setText((String)tablaTelefonos.getValueAt(index, 2));
+			cbxOperadora.setSelectedItem(tablaTelefonos.getValueAt(index, 3));
+			btnAgregar.setEnabled(false);
+			btnActualizar.setEnabled(true);
+			btnBorrar.setEnabled(true);
+			btnCancelar.setEnabled(true);
+		    }
+		}
+	    else
+		JOptionPane.showMessageDialog(this, "No se ha encontrado el número", "Error", JOptionPane.ERROR_MESSAGE);
+	}else{
+	    JOptionPane.showMessageDialog(this, "Ingrese un número a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+	}
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void tablaTelefonosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaTelefonosMouseClicked
@@ -342,12 +369,13 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
         btnActualizar.setEnabled(false);
 	btnBorrar.setEnabled(false);
 	btnCancelar.setEnabled(false);
-	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
+	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(), 
+		controladorTelefono.telefonosPorCedula(controladorUsuario.getSesion().getCedula()));
     }//GEN-LAST:event_formInternalFrameActivated
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiar();
-	txtCodigo.setText(this.controladorTelefono.cantidadTelefonos()+"");
+	txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
 	btnActualizar.setEnabled(false);
 	btnBorrar.setEnabled(false);
 	btnCancelar.setEnabled(false);
@@ -358,6 +386,20 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
 	cbxTipo.setSelectedIndex(0);
 	fTxtNumero.setValue("");
 	cbxOperadora.setSelectedIndex(0);
+    }
+    
+    public void verTelefonos(List<Telefono> telefonos){
+	DefaultTableModel tabla = (DefaultTableModel) tablaTelefonos.getModel();
+	tabla.setRowCount(0);
+	for(int i = 0; i < telefonos.size(); i++){
+	    tabla.addRow(new Object[]{
+		telefonos.get(i).getCodigo(),
+		telefonos.get(i).getTipo().trim(),
+		telefonos.get(i).getNumero().trim(),
+		telefonos.get(i).getOperadora().trim(),
+		telefonos.get(i).getUsuario().getCedula().trim()
+	    });
+	}
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

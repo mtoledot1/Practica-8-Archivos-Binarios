@@ -11,6 +11,7 @@ public interface ITelefonoDAO {
     public void create(Telefono telefono);
     public Telefono read(int codigo);
     public void update(Telefono telefono);
-    public void delete(Telefono telefono);   
+    public void delete(int codigo);   
     public List<Telefono> findAll();
+    public int obtenerUltimoCodigo();
 }

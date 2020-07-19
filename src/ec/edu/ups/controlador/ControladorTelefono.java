@@ -8,10 +8,10 @@ package ec.edu.ups.controlador;
 import java.util.List;
 import ec.edu.ups.idao.ITelefonoDAO;
 import ec.edu.ups.modelo.Telefono;
+import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.vista.VentanaGestionTelefono;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -38,20 +38,9 @@ public class ControladorTelefono {
     private String cedula; 10 bytes + 2 extras
     */
     public void registrar(int codigo, String numero, String tipo, String operadora, String cedula){
-	telefono.setCodigo(codigo);
-	
-	numero = validarString(numero, 25);
-	telefono.setNumero(numero);
-	
-	tipo = validarString(tipo, 25);
-	telefono.setTipo(tipo);
-	
-	operadora = validarString(operadora, 25);
-	telefono.setOperadora(operadora);
-	
-	cedula = validarString(cedula, 10);
-	telefono.setUsuario(controladorUsuario.buscar(cedula));
-	
+	telefono = new Telefono(codigo, numero, tipo, operadora);
+	Usuario usuario = controladorUsuario.buscar(controladorUsuario.getSesion().getCedula());
+	telefono.setUsuario(usuario);
 	telefonoDAO.create(telefono);
     }
     
@@ -61,42 +50,46 @@ public class ControladorTelefono {
     }
     
     public void eliminar(int codigo){
-	telefono = new Telefono();
-	telefono.setCodigo(codigo);
-        telefonoDAO.delete(telefono);
+        telefonoDAO.delete(codigo);
     }
     
-    public void verTelefono(){
-        
-    }
-    
-    public void verTelefonos(DefaultTableModel tabla){
-        List<Telefono> telefonos;
-        telefonos = telefonoDAO.findAll();
+    public void verTelefonos(DefaultTableModel tabla, List<Telefono> telefonos){
 	tabla.setNumRows(0);
 	for(int i = 0; i < telefonos.size(); i++){
 	    tabla.addRow(new Object[]{
 		telefonos.get(i).getCodigo(),
-		telefonos.get(i).getTipo(),
-		telefonos.get(i).getNumero(),
-		telefonos.get(i).getOperadora()
+		telefonos.get(i).getTipo().trim(),
+		telefonos.get(i).getNumero().trim(),
+		telefonos.get(i).getOperadora().trim(),
+		telefonos.get(i).getUsuario().getCedula().trim()
 	    });
 	}
     }
     
-    public int cantidadTelefonos(){
-	List<Telefono> telefonos;
-        telefonos = telefonoDAO.findAll();
-	return telefonos.size();
+    public List<Telefono> listarTelefonos(){
+	return telefonoDAO.findAll();
     }
     
-    public String validarString(String str, int longitud){
-	if(str.length() > longitud)
-	    str = str.substring(0, longitud);
-	else if(str.length() < longitud)
-	    while(str.length() < longitud)
-		str += " ";
-	return str;
+    public int ultimoCodigo(){
+	return telefonoDAO.obtenerUltimoCodigo();
     }
     
+    public List<Telefono> telefonosPorCedula(String cedula){
+	cedula = cedula.trim();
+	List<Telefono> telefonos = new ArrayList<>();
+	for(Telefono t : telefonoDAO.findAll()){
+	    if(t.getUsuario().getCedula().trim().equals(cedula))
+		telefonos.add(t);
+	}
+	return telefonos;
+    }
+    
+    public List<Telefono> telefonosPorCorreo(String correo){
+	List<Telefono> telefonos = new ArrayList<>();
+	for(Telefono t : telefonoDAO.findAll()){
+	    if(t.getUsuario().getCorreo().trim().equals(correo))
+		telefonos.add(t);
+	}
+	return telefonos;
+    }
 }

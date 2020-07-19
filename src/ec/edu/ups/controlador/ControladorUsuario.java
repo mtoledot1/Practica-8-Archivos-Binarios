@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ec.edu.ups.controlador;
 
 import ec.edu.ups.idao.*;
 import ec.edu.ups.modelo.*;
-import ec.edu.ups.vista.*;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -20,13 +14,11 @@ public class ControladorUsuario {
     private Usuario sesion;
 
     public ControladorUsuario(IUsuarioDAO iUsuarioDAO) {
-        //this.vistaUsuario = vistaUsuario;
-        //this.vistaTelefono = vistaTelefono;
         this.usuarioDAO = iUsuarioDAO;
     }
     
     public boolean registrar(String cedula, String nombre, String apellido, String correo, String pass){
-	usuario = new Usuario(cedula, nombre, apellido, correo, correo);
+	usuario = new Usuario(cedula, nombre, apellido, correo, pass);
         usuarioDAO.create(usuario);
 	return true;
     }
@@ -37,18 +29,22 @@ public class ControladorUsuario {
         usuarioDAO.update(usuario);
     }
     
+    public void eliminar(String cedula){
+	usuarioDAO.delete(cedula);
+    }
+    
     public void verUsuarios(DefaultTableModel tabla){
         List<Usuario> usuarios;
         usuarios = usuarioDAO.findAll();
         tabla.setRowCount(0);
-	    for(int i = 0; i < usuarios.size(); i++){
-		tabla.addRow(new Object[]{
-		    usuarios.get(i).getCedula(),
-		    usuarios.get(i).getNombre(),
-		    usuarios.get(i).getApellido(),
-		    usuarios.get(i).getCorreo()
-		});
-	    }
+	for(int i = 0; i < usuarios.size(); i++){
+	    tabla.addRow(new Object[]{
+		usuarios.get(i).getCedula().trim(),
+		usuarios.get(i).getNombre().trim(),
+		usuarios.get(i).getApellido().trim(),
+		usuarios.get(i).getCorreo().trim()
+	    });
+	}
     }
     
     public List<Usuario> listarUsuarios(){
@@ -68,20 +64,10 @@ public class ControladorUsuario {
         sesion = null;
     }
     
-    /*public List<Telefono> telefonosSesionVentana(){
-        
-    }*/
-    
     public Usuario buscar(String cedula){
         usuario = usuarioDAO.read(cedula);
         return usuario;
     }
-    
-    /*public List<Telefono> telefonosPorCedula(String cedula){
-        usuario = usuarioDAO.read(cedula);
-        
-        return telefonos;
-    }*/
     
     public boolean sesionIniciada(){
         if(sesion == null)

@@ -37,6 +37,7 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        rBtnGroup = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaTelefonos = new javax.swing.JTable();
         lblCedula = new javax.swing.JLabel();
@@ -50,6 +51,8 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
         btnBuscar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnListar = new javax.swing.JButton();
+        rBtnCedula = new javax.swing.JRadioButton();
+        rBtnCorreo = new javax.swing.JRadioButton();
 
         setClosable(true);
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -75,7 +78,7 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Codigo", "Tipo", "Número", "Operadora"
+                "Codigo", "Tipo", "Número", "Operadora", "Cedula"
             }
         ));
         jScrollPane1.setViewportView(tablaTelefonos);
@@ -115,6 +118,23 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
             }
         });
 
+        rBtnGroup.add(rBtnCedula);
+        rBtnCedula.setSelected(true);
+        rBtnCedula.setText("Buscar por Cédula");
+        rBtnCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBtnCedulaActionPerformed(evt);
+            }
+        });
+
+        rBtnGroup.add(rBtnCorreo);
+        rBtnCorreo.setText("Buscar por Correo");
+        rBtnCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBtnCorreoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,26 +158,34 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
                     .addComponent(txtCedula)
                     .addComponent(txtNombre)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
-                .addComponent(btnListar)
-                .addGap(90, 90, 90))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnListar)
+                    .addComponent(rBtnCedula)
+                    .addComponent(rBtnCorreo))
+                .addGap(84, 84, 84))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCedula)
-                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCedula)
+                            .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(rBtnCedula)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombre)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rBtnCorreo))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblApellido)
-                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnListar))
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCorreo)
@@ -165,7 +193,8 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscar)
-                    .addComponent(btnCancelar))
+                    .addComponent(btnCancelar)
+                    .addComponent(btnListar))
                 .addGap(38, 38, 38)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -175,30 +204,28 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String cedula = txtCedula.getText();
-	Usuario usuario = controladorUsuario.buscar(cedula);
-	if(usuario != null){
-	    txtNombre.setText(usuario.getNombre());
-	    txtApellido.setText(usuario.getApellido());
-	    txtCorreo.setText(usuario.getCorreo());
-	    /*List<Telefono> telefonos = controladorUsuario.telefonosPorCedula(cedula);
-	    DefaultTableModel tabla = (DefaultTableModel) tablaTelefonos.getModel();
-	    tabla.setRowCount(0);
-	    for(int i = 0; i < telefonos.size(); i++){
-		tabla.addRow(new Object[]{
-		    telefonos.get(i).getCodigo(),
-		    telefonos.get(i).getTipo(),
-		    telefonos.get(i).getNumero(),
-		    telefonos.get(i).getOperadora()
-		});
-	    }*/
+        String str;
+	List<Telefono> telefonos;
+	if(rBtnGroup.isSelected(rBtnCedula.getModel())){
+	    str = txtCedula.getText();
+	    telefonos = controladorTelefono.telefonosPorCedula(str);
+	}else{
+	    str = txtCorreo.getText();
+	    telefonos = controladorTelefono.telefonosPorCorreo(str);
+	}
+	if(!telefonos.isEmpty()){
+	    txtCedula.setText(telefonos.get(0).getUsuario().getCedula().trim());
+	    txtNombre.setText(telefonos.get(0).getUsuario().getNombre().trim());
+	    txtApellido.setText(telefonos.get(0).getUsuario().getApellido().trim());
+	    txtCorreo.setText(telefonos.get(0).getUsuario().getCorreo().trim());
+	    controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(), telefonos);
 	}else{
 	    JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
 	}
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel());
+        controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(), controladorTelefono.listarTelefonos());
 	limpiar();
     }//GEN-LAST:event_btnListarActionPerformed
 
@@ -210,6 +237,16 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiar();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void rBtnCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBtnCedulaActionPerformed
+        txtCedula.setEditable(true);
+	txtCorreo.setEditable(false);
+    }//GEN-LAST:event_rBtnCedulaActionPerformed
+
+    private void rBtnCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBtnCorreoActionPerformed
+        txtCedula.setEditable(false);
+	txtCorreo.setEditable(true);
+    }//GEN-LAST:event_rBtnCorreoActionPerformed
 
     public void limpiar(){
 	txtCedula.setText("");
@@ -227,6 +264,9 @@ public class VentanaBuscarTelefono extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblCedula;
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JRadioButton rBtnCedula;
+    private javax.swing.JRadioButton rBtnCorreo;
+    private javax.swing.ButtonGroup rBtnGroup;
     private javax.swing.JTable tablaTelefonos;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCedula;

@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/vista/VentanaGestionTelefono.java</file>
+            <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/controlador/ControladorTelefono.java</file>
             <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/vista/VentanaGestionUsuario.java</file>
-            <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/controlador/ControladorUsuario.java</file>
+            <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/dao/UsuarioDAO.java</file>
+            <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/idao/ITelefonoDAO.java</file>
+            <file>file:/home/tano/NetBeansProjects/Agenda_Telefonica_Frame_Archivos/src/ec/edu/ups/dao/TelefonoDAO.java</file>
         </group>
     </open-files>
 </project-private>

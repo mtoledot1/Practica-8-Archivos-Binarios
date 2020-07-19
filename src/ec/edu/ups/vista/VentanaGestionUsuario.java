@@ -24,6 +24,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 	initComponents();
 	this.controladorUsuario = controladorUsuario;
 	this.controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
+	desactivar();
     }
 
     /**
@@ -48,6 +49,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
         txtApellido = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
 
         setClosable(true);
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -70,11 +72,6 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
         });
 
         btnActualizar.setText("Actualizar");
-        btnActualizar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnActualizarMouseClicked(evt);
-            }
-        });
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
@@ -126,37 +123,44 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
             }
         });
 
+        btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(181, 181, 181)
+                .addComponent(btnBuscar)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNombre)
+                            .addComponent(lblCedula)
+                            .addComponent(lblApellido)
+                            .addComponent(lblCorreo))
+                        .addGap(78, 78, 78)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCedula)
+                            .addComponent(txtNombre)
+                            .addComponent(txtApellido)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(234, 234, 234)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnBuscar)
-                                .addGap(34, 34, 34)
-                                .addComponent(btnActualizar)
-                                .addGap(42, 42, 42)
-                                .addComponent(btnCancelar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNombre)
-                                    .addComponent(lblCedula)
-                                    .addComponent(lblApellido)
-                                    .addComponent(lblCorreo))
-                                .addGap(78, 78, 78)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                                    .addComponent(txtNombre)
-                                    .addComponent(txtApellido)
-                                    .addComponent(txtCorreo))))
-                        .addGap(0, 183, Short.MAX_VALUE)))
+                        .addComponent(btnActualizar)
+                        .addGap(21, 21, 21)
+                        .addComponent(btnBorrar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancelar)))
+                .addContainerGap(198, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -182,7 +186,8 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnActualizar)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar)
+                    .addComponent(btnBorrar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                 .addContainerGap())
@@ -197,18 +202,20 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiar();
+	activar();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        ddesActivar();
+        desactivar();
         String cedula = txtCedula.getText();
 	Usuario usuario = controladorUsuario.buscar(cedula);
 	if(usuario != null){
-	    txtNombre.setText(usuario.getNombre());
-	    txtApellido.setText(usuario.getApellido());
-	    txtCorreo.setText(usuario.getCorreo());
-//	    int index = controladorUsuario.listarUsuarios().indexOf(usuario);
-//	    tablaUsuarios.setRowSelectionInterval(index, index);
+	    txtNombre.setText(usuario.getNombre().trim());
+	    txtApellido.setText(usuario.getApellido().trim());
+	    txtCorreo.setText(usuario.getCorreo().trim());
+	    int index = controladorUsuario.listarUsuarios().indexOf(usuario);
+	    tablaUsuarios.setRowSelectionInterval(index, index);
+	    activar();
 	}else{
 	    JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
 	}
@@ -222,29 +229,34 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 	int fila = tablaUsuarios.getSelectedRow();
 	String pass = controladorUsuario.listarUsuarios().get(fila).getContrasenia();
 	controladorUsuario.actualizar(cedula, nombre, apellido, correo, pass);
-	JOptionPane.showMessageDialog(this, "Usuario Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
+	JOptionPane.showMessageDialog(this, "Usuario Actualizado", "Actualizar", JOptionPane.INFORMATION_MESSAGE);
 	controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
 	limpiar();
+	desactivar();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
-        ddesActivar();
         int fila = tablaUsuarios.getSelectedRow();
 	txtCedula.setText(tablaUsuarios.getValueAt(fila, 0)+"");
 	txtNombre.setText(tablaUsuarios.getValueAt(fila, 1)+"");
 	txtApellido.setText(tablaUsuarios.getValueAt(fila, 2)+"");
 	txtCorreo.setText(tablaUsuarios.getValueAt(fila, 3)+"");
+	activar();
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         // TODO add your handling code here:
-        activar();
+        desactivar();
+	controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
     }//GEN-LAST:event_formInternalFrameActivated
 
-    private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
-        // TODO add your handling code here:
-        ddesActivar();
-    }//GEN-LAST:event_btnActualizarMouseClicked
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        String cedula = txtCedula.getText();
+	controladorUsuario.eliminar(cedula);
+	JOptionPane.showMessageDialog(this, "Usuario Eliminado", "Eliminar", JOptionPane.INFORMATION_MESSAGE);
+	controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
+	limpiar();
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
     public void limpiar(){
 	txtCedula.setText("");
@@ -254,19 +266,24 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
     }
     
     public void activar(){
-        txtNombre.enable(false);
-        txtApellido.enable(false);
-        txtCorreo.enable(false);
+	txtNombre.setEnabled(true);
+	txtApellido.setEnabled(true);
+	txtCorreo.setEnabled(true);
+        btnActualizar.setEnabled(true);
+	btnBorrar.setEnabled(true);
     }
     
-    public void ddesActivar(){
-        txtNombre.enable(true);
-        txtApellido.enable(true);
-        txtCorreo.enable(true);
+    public void desactivar(){
+	txtNombre.setEnabled(false);
+	txtApellido.setEnabled(false);
+	txtCorreo.setEnabled(false);
+        btnActualizar.setEnabled(false);
+	btnBorrar.setEnabled(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JScrollPane jScrollPane1;

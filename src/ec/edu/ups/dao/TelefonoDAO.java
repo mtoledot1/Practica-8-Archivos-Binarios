@@ -30,13 +30,12 @@ public class TelefonoDAO implements ITelefonoDAO{
     private String operadora; 25 bytes + 2 extras
     private String cedula; 10 bytes + 2 extras
     */
-    private TreeSet<Telefono> telefonos;
     private RandomAccessFile file;
     private int tamanioRegistro;
     private ControladorUsuario controladorUsuario;
+    private List<Telefono> telefonos;
 
     public TelefonoDAO(ControladorUsuario controladorUsuario) {
-	telefonos = new TreeSet<>();
 	this.controladorUsuario = controladorUsuario;
 	try {
 	    tamanioRegistro = 97;
@@ -50,6 +49,7 @@ public class TelefonoDAO implements ITelefonoDAO{
     @Override
     public void create(Telefono telefono) {
         try {
+	    file.seek(file.length());
 	    file.writeInt(telefono.getCodigo());
 	    file.writeUTF(telefono.getNumero());
 	    file.writeUTF(telefono.getTipo());
@@ -65,7 +65,9 @@ public class TelefonoDAO implements ITelefonoDAO{
     public Telefono read(int codigo) {
 	try{
 	    int salto = 0;
-	    while(salto < file.length()){
+	    while(salto < file.length()-1){
+		System.out.println("Longitud archivo: " + file.length());
+		System.out.println("Posicion puntero: " + salto);
 		file.seek(salto);
 		int codigoArchivo = file.readInt();
 		if(codigo == codigoArchivo){
@@ -74,6 +76,7 @@ public class TelefonoDAO implements ITelefonoDAO{
 		    telefono.setUsuario(usuario);
 		    return telefono;
 		}
+		salto += tamanioRegistro;
 	    }
 	}catch (IOException ex){
 	    System.out.println("Error de lectura y escritura: ");
@@ -84,24 +87,93 @@ public class TelefonoDAO implements ITelefonoDAO{
 
     @Override
     public void update(Telefono telefono) {
-        
+        telefonos = new ArrayList<>();
+	int codigo = telefono.getCodigo();
+        try {
+            int pos = 0;
+	    file.seek(pos);
+            while (pos < file.length()) {                
+                int cod = file.readInt();
+		Telefono telf = new Telefono(codigo, file.readUTF(), file.readUTF(), file.readUTF());
+                if(cod == codigo)
+                    telf = telefono;
+		telefonos.add(telf);
+                pos += 128;
+            }
+	    file.setLength(0);
+	    for(Telefono t : telefonos)
+		create(t);
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
     }
 
     @Override
-    public void delete(Telefono telefono) {
-        
+    public void delete(int codigo) {
+        telefonos = new ArrayList<>();
+        try {
+            int pos = 0;
+            while (pos < file.length()) {
+		file.seek(pos);
+                int cod = file.readInt();
+                if(codigo != cod){
+                    Telefono telefono = new Telefono(codigo, file.readUTF(), file.readUTF(), file.readUTF());
+                    telefonos.add(telefono);
+                }
+                pos += 128;
+            }
+	    file.setLength(0);
+	    for(Telefono t : telefonos)
+		create(t);
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public List<Telefono> findAll() {
-        return new ArrayList<Telefono>(telefonos);
+	telefonos = new ArrayList<>();
+        try {
+            int pos = 0;
+	    file.seek(pos);
+	    System.out.println("Longitud archivo: "+file.length());
+            while (pos < file.length()) {
+		System.out.println(file.getFilePointer());
+		int codigo = file.readInt();
+		System.out.println(file.getFilePointer());
+		String numero = file.readUTF();
+		System.out.println(file.getFilePointer());
+		String tipo = file.readUTF();
+		System.out.println(file.getFilePointer());
+		String operadora = file.readUTF();
+		System.out.println(file.getFilePointer());
+                Telefono telf = new Telefono(codigo, numero, tipo, operadora);
+		String cedula = file.readUTF();
+		System.out.println(file.getFilePointer());
+		telf.setUsuario(controladorUsuario.buscar(cedula));
+                telefonos.add(telf);
+                pos += tamanioRegistro;
+            }
+            return telefonos;
+        } catch (IOException ex) {
+            System.out.println("Error de escritura y lectura");
+            ex.printStackTrace();
+        }
+        return null;
     }
     
     public int obtenerUltimoCodigo(){
 	try{
-	    if(file.length() > tamanioRegistro)
+	    System.out.println(file.length());
+	    if(file.length() >= tamanioRegistro)
 		file.seek(file.length() - tamanioRegistro);
+	    else
+		return -1;
+	    //System.out.println(file.getFilePointer());
 	    int codigo = file.readInt();
+	    //System.out.println(codigo);
 	    return codigo;
 	}catch (IOException ex){
 	    System.out.println("Error de lectura y escritura: ");
