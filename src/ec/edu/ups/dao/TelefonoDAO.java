@@ -48,12 +48,13 @@ public class TelefonoDAO implements ITelefonoDAO{
     @Override
     public void create(Telefono telefono) {
         try {
+	    file.seek(file.length());
 	    file.writeInt(telefono.getCodigo());
 	    file.writeUTF(telefono.getNumero());
 	    file.writeUTF(telefono.getTipo());
 	    file.writeUTF(telefono.getOperadora());
 	    file.writeUTF(telefono.getUsuario().getCedula());
-	    
+	    System.out.println("Longitud archivo despues de crear: "+file.getFilePointer());
 	} catch (IOException ex) {
 	    System.out.println("Error de lectura y escritura: ");
 	    ex.printStackTrace();
@@ -97,13 +98,18 @@ public class TelefonoDAO implements ITelefonoDAO{
             List<Telefono> telefono = new ArrayList<>();
             int pos = 0;
 	    file.seek(pos);
+	    System.out.println("Longitud archivo: "+file.length());
             while (pos < file.length()-1) {
-		System.out.println(file.getFilePointer());
-		//
 		int codigo = file.readInt();
-                Telefono telf = new Telefono(codigo, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+		//System.out.println(file.getFilePointer());
+		String numero = file.readUTF();
+		//System.out.println(file.getFilePointer());
+		String tipo = file.readUTF();
 		System.out.println(file.getFilePointer());
-		String cedula = file.readUTF().trim();
+		String operadora = file.readUTF();
+		System.out.println(file.getFilePointer());
+                Telefono telf = new Telefono(codigo, numero, tipo, operadora);
+		String cedula = file.readUTF();
 		System.out.println(file.getFilePointer());
 		telf.setUsuario(controladorUsuario.buscar(cedula));
                 telefono.add(telf);
@@ -119,13 +125,13 @@ public class TelefonoDAO implements ITelefonoDAO{
     
     public int obtenerUltimoCodigo(){
 	try{
-	    if(file.length() > tamanioRegistro)
+	    if(file.length() >= tamanioRegistro)
 		file.seek(file.length() - tamanioRegistro);
 	    else
 		return -1;
-	    System.out.println(file.getFilePointer());
+	    //System.out.println(file.getFilePointer());
 	    int codigo = file.readInt();
-	    System.out.println(codigo);
+	    //System.out.println(codigo);
 	    return codigo;
 	}catch (IOException ex){
 	    System.out.println("Error de lectura y escritura: ");

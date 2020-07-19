@@ -45,6 +45,7 @@ public class UsuarioDAO implements IUsuarioDAO{
     @Override
     public void create(Usuario usuario) {
 	try {
+	    file.seek(file.length());
 	    file.writeUTF(usuario.getCedula());
 	    file.writeUTF(usuario.getNombre());
 	    file.writeUTF(usuario.getApellido());
@@ -60,8 +61,8 @@ public class UsuarioDAO implements IUsuarioDAO{
     public Usuario read(String cedula) {
         try {
             int pos = 0;
+	    file.seek(pos);
             while (pos < file.length()) {                
-                file.seek(pos);
                 String cedulaUs = file.readUTF();
                 cedulaUs = cedulaUs.trim();
                 if(cedula.equals(cedulaUs)){
@@ -83,8 +84,8 @@ public class UsuarioDAO implements IUsuarioDAO{
 	String cedula = usuario.getCedula();
         try {
             int pos = 0;
+	    file.seek(pos);
             while (pos < file.length()) {                
-                file.seek(pos);
                 String cedulaUs = file.readUTF().trim();
 		Usuario usr = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
                 if(cedula.equals(cedulaUs)){
@@ -104,8 +105,8 @@ public class UsuarioDAO implements IUsuarioDAO{
 	usuarios = new ArrayList<>();
         try {
             int pos = 0;
+	    file.seek(pos);
             while (pos < file.length()) {                
-                file.seek(pos);
                 String cedulaUs = file.readUTF().trim();
                 if(!cedula.equals(cedulaUs)){
                     Usuario usuario = new Usuario(cedulaUs, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
@@ -132,8 +133,8 @@ public class UsuarioDAO implements IUsuarioDAO{
 	usuarios = new ArrayList<>();
         try {
             int pos = 0;
+	    file.seek(pos);
             while (pos < file.length()) {
-                file.seek(pos);
 		Usuario usuario = new Usuario(file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
                 pos += 128;
 		usuarios.add(usuario);
@@ -149,8 +150,8 @@ public class UsuarioDAO implements IUsuarioDAO{
     public Usuario login(String correo, String pass) {
 	try {
 	    int salto = 66;
+	    file.seek(salto);
 	    while(salto < file.length()){
-		file.seek(salto);
 		String correoArchivo = file.readUTF();
 		correoArchivo = correoArchivo.trim();
 		String passArchivo = file.readUTF();
