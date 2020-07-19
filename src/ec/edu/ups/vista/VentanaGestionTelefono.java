@@ -287,7 +287,7 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbxTipoActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        int codigo = controladorTelefono.ultimoCodigo()+1;
+        int codigo = Integer.parseInt(txtCodigo.getText());
 	String numero = fTxtNumero.getText();
 	String tipo = (String)cbxTipo.getSelectedItem();
 	String operadora = (String)cbxOperadora.getSelectedItem();

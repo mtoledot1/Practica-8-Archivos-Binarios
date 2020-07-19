@@ -225,10 +225,10 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 	JOptionPane.showMessageDialog(this, "Usuario Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
 	controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
 	limpiar();
+	
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
-        desactivar();
         int fila = tablaUsuarios.getSelectedRow();
 	txtCedula.setText(tablaUsuarios.getValueAt(fila, 0)+"");
 	txtNombre.setText(tablaUsuarios.getValueAt(fila, 1)+"");

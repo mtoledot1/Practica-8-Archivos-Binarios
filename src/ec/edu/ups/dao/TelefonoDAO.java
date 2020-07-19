@@ -37,7 +37,7 @@ public class TelefonoDAO implements ITelefonoDAO{
     public TelefonoDAO(ControladorUsuario controladorUsuario) {
 	this.controladorUsuario = controladorUsuario;
 	try {
-	    tamanioRegistro = 98;
+	    tamanioRegistro = 97;
 	    file = new RandomAccessFile("datos/telefono.dat", "rw");
 	} catch (FileNotFoundException ex) {
 	    System.out.println("Error de lectura y escritura: ");
@@ -53,6 +53,7 @@ public class TelefonoDAO implements ITelefonoDAO{
 	    file.writeUTF(telefono.getTipo());
 	    file.writeUTF(telefono.getOperadora());
 	    file.writeUTF(telefono.getUsuario().getCedula());
+	    
 	} catch (IOException ex) {
 	    System.out.println("Error de lectura y escritura: ");
 	    ex.printStackTrace();
@@ -95,11 +96,15 @@ public class TelefonoDAO implements ITelefonoDAO{
         try {
             List<Telefono> telefono = new ArrayList<>();
             int pos = 0;
-            while (pos < file.length()) {                
-                file.seek(pos);
+	    file.seek(pos);
+            while (pos < file.length()-1) {
+		System.out.println(file.getFilePointer());
+		//
 		int codigo = file.readInt();
                 Telefono telf = new Telefono(codigo, file.readUTF().trim(), file.readUTF().trim(), file.readUTF().trim());
+		System.out.println(file.getFilePointer());
 		String cedula = file.readUTF().trim();
+		System.out.println(file.getFilePointer());
 		telf.setUsuario(controladorUsuario.buscar(cedula));
                 telefono.add(telf);
                 pos += tamanioRegistro;
@@ -117,8 +122,10 @@ public class TelefonoDAO implements ITelefonoDAO{
 	    if(file.length() > tamanioRegistro)
 		file.seek(file.length() - tamanioRegistro);
 	    else
-		return 0;
+		return -1;
+	    System.out.println(file.getFilePointer());
 	    int codigo = file.readInt();
+	    System.out.println(codigo);
 	    return codigo;
 	}catch (IOException ex){
 	    System.out.println("Error de lectura y escritura: ");
