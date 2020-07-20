@@ -89,7 +89,7 @@ public class UsuarioDAO implements IUsuarioDAO{
             int pos = 0;
 	    file.seek(pos);
             while (pos < file.length()) {                
-                String cedulaUs = file.readUTF();
+                String cedulaUs = file.readUTF().trim();
 		Usuario usr = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                 if(cedula.equals(cedulaUs)){
                     usr = usuario;
@@ -114,7 +114,7 @@ public class UsuarioDAO implements IUsuarioDAO{
             int pos = 0;
             while (pos < file.length()) {
 		file.seek(pos);
-                String cedulaUs = file.readUTF();
+                String cedulaUs = file.readUTF().trim();
                 if(!cedula.equals(cedulaUs)){
                     Usuario usuario = new Usuario(cedulaUs, file.readUTF(), file.readUTF(), file.readUTF(), file.readUTF());
                     usuarios.add(usuario);

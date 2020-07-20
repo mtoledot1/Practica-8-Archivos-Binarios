@@ -5,6 +5,7 @@
  */
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ControladorTelefono;
 import ec.edu.ups.controlador.ControladorUsuario;
 import ec.edu.ups.modelo.Usuario;
 import javax.swing.JOptionPane;
@@ -17,9 +18,11 @@ import javax.swing.table.DefaultTableModel;
 public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 
     private ControladorUsuario controladorUsuario;
+    private ControladorTelefono controladorTelefono;
     
-    public VentanaGestionUsuario(ControladorUsuario controladorUsuario) {
+    public VentanaGestionUsuario(ControladorTelefono controladorTelefono, ControladorUsuario controladorUsuario) {
 	initComponents();
+	this.controladorTelefono = controladorTelefono;
 	this.controladorUsuario = controladorUsuario;
 	this.controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
 	desactivar();
@@ -250,7 +253,7 @@ public class VentanaGestionUsuario extends javax.swing.JInternalFrame {
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         String cedula = txtCedula.getText();
-	controladorUsuario.eliminar(cedula);
+	controladorTelefono.eliminarUsuario(cedula);
 	JOptionPane.showMessageDialog(this, "Usuario Eliminado", "Eliminar", JOptionPane.INFORMATION_MESSAGE);
 	controladorUsuario.verUsuarios((DefaultTableModel) tablaUsuarios.getModel());
 	limpiar();

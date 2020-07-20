@@ -90,11 +90,16 @@ public class TelefonoDAO implements ITelefonoDAO{
 	    file.seek(pos);
             while (pos < file.length()) {                
                 int cod = file.readInt();
-		Telefono telf = new Telefono(codigo, file.readUTF(), file.readUTF(), file.readUTF());
-                if(cod == codigo)
+		Telefono telf;
+		if(cod == codigo)
                     telf = telefono;
+		else{
+		    telf = new Telefono(cod, file.readUTF(), file.readUTF(), file.readUTF());
+		    Usuario usuario = controladorUsuario.buscar(file.readUTF());
+		    telefono.setUsuario(usuario);
+		}
 		telefonos.add(telf);
-                pos += 128;
+                pos += tamanioRegistro;
             }
 	    file.setLength(0);
 	    for(Telefono t : telefonos)
@@ -114,10 +119,12 @@ public class TelefonoDAO implements ITelefonoDAO{
 		file.seek(pos);
                 int cod = file.readInt();
                 if(codigo != cod){
-                    Telefono telefono = new Telefono(codigo, file.readUTF(), file.readUTF(), file.readUTF());
+                    Telefono telefono = new Telefono(cod, file.readUTF(), file.readUTF(), file.readUTF());
+		    Usuario usuario = controladorUsuario.buscar(file.readUTF());
+		    telefono.setUsuario(usuario);
                     telefonos.add(telefono);
                 }
-                pos += 128;
+                pos += tamanioRegistro;
             }
 	    file.setLength(0);
 	    for(Telefono t : telefonos)
