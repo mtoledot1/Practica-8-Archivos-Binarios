@@ -92,4 +92,10 @@ public class ControladorTelefono {
 	}
 	return telefonos;
     }
+    
+    public void eliminarUsuario(String cedula){
+	for(Telefono t : telefonosPorCedula(cedula))
+	    eliminar(t.getCodigo());
+	controladorUsuario.eliminar(cedula);
+    }
 }

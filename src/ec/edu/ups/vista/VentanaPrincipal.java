@@ -77,7 +77,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 	iniciarSesion = new VentanaIniciarSesion(controladorUsuario, this, localizacion, mensajes);
 	registrarUsuario = new VentanaRegistrarUsuario(controladorUsuario, localizacion, mensajes);
 	gestionTelefono = new VentanaGestionTelefono(controladorTelefono, controladorUsuario, localizacion, mensajes);
-	gestionUsuario = new VentanaGestionUsuario(controladorUsuario);
+	gestionUsuario = new VentanaGestionUsuario(controladorTelefono, controladorUsuario);
 	buscarTelefono = new VentanaBuscarTelefono(controladorUsuario, controladorTelefono);
 	//localizacion = Locale.getDefault();
 	

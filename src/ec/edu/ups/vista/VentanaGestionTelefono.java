@@ -365,7 +365,8 @@ public class VentanaGestionTelefono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameClosed
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-        btnActualizar.setEnabled(false);
+        txtCodigo.setText((controladorTelefono.ultimoCodigo()+1) + "");
+	btnActualizar.setEnabled(false);
 	btnBorrar.setEnabled(false);
 	btnCancelar.setEnabled(false);
 	controladorTelefono.verTelefonos((DefaultTableModel) tablaTelefonos.getModel(), 
